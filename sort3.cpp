@@ -2,26 +2,17 @@
 #include <vector>
 using namespace std;
 
-// prints the current state of the array
 void printArray(vector<int>& arr) {
     for (int i = 0; i < arr.size(); i++)
         cout << arr[i] << " ";
     cout << "\n";
 }
 
-// prints array with a label — used for step-by-step output
 void printStep(vector<int>& arr, string label) {
     cout << label << ": ";
     printArray(arr);
 }
-
-// TODO 1: bubble sort — add printStep() inside the outer loop
-// after each pass, print the current state
-// label: "Pass " + to_string(i + 1)
 void bubbleSort(vector<int>& arr) {
-    // your existing bubble sort here
-    // add: printStep(arr, "Pass " + to_string(i + 1));
-    // after the inner loop closes
     for (int i = 0; i < arr.size() - 1; i++) {
         for (int j = 0; j < arr.size() - i - 1; j++) {
             if (arr[j] > arr[j+1]) {
@@ -33,12 +24,7 @@ void bubbleSort(vector<int>& arr) {
         printStep(arr, "Pass " + to_string(i + 1));
     }
 }
-
-// TODO 2: selection sort — add printStep() inside the outer loop
-// after each swap, print the current state
-// label: "Step " + to_string(i + 1)
 void selectionSort(vector<int>& arr) {
-    // your existing selection sort here
       for (int i = 0; i < arr.size(); i++) {
         int minIndex = i;
         for (int j = i + 1; j < arr.size() - 1; j++) {
@@ -49,37 +35,83 @@ void selectionSort(vector<int>& arr) {
         int temp = arr[i];
         arr[i] = arr[minIndex];
         arr[minIndex] = temp;
+        printStep(arr, "Step " + to_string(i + 1));
     }
 }
-
-// TODO 3: merge sort — add printStep() inside merge()
-// after copying temp back to arr, print the current state
-// label: "Merged"
 void merge(vector<int>& arr, int left, int mid, int right) {
-    // your existing merge here
+     vector<int> temp;
+
+    int i = left;
+    int j = mid + 1;
+
+    while (i <= mid && j <= right) {
+        if (arr[i] <= arr[j]) {
+            temp.push_back(arr[i]);
+            i++;
+        } else {
+            temp.push_back(arr[j]);
+            j++;
+        }
+    }
+    while (i <= mid) {
+        temp.push_back(arr[i]);
+        i++;
+    }
+    while (j <= right) {
+        temp.push_back(arr[j]);
+        j++;
+    }
+    for (int k = 0; k < temp.size(); k++) {
+        arr[left + k] = temp[k];
+        printStep(arr, "Merged ");
+    }
 }
 void mergeSort(vector<int>& arr, int left, int right) {
-    // your existing mergeSort here — no changes needed
-}
+    if (left >= right) return;
 
-// TODO 4: quicksort — add printStep() inside partition()
-// after placing pivot, print the current state
-// label: "Pivot placed"
+    int mid  = (left + right) / 2;
+
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+    merge(arr, left, mid, right);
+}
 int partition(vector<int>& arr, int low, int high) {
-    // your existing partition here
-}
-void quickSort(vector<int>& arr, int low, int high) {
-    // your existing quickSort here — no changes needed
-}
+    int pivot = arr[high];
+    int i = low - 1;
 
-// TODO 5: getUserArray() — ask user for array size and elements
-// return a vector<int> filled with user input
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        }
+    }
+    
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+
+    return i + 1;
+} 
+void quickSort(vector<int>& arr, int low, int high) {
+     if (low >= high) return;
+
+    int pivotIndex = partition(arr, low, high);
+
+    quickSort(arr, low, pivotIndex - 1);
+    quickSort(arr, pivotIndex + 1, high);
+}
 vector<int> getUserArray() {
-    int size;
+    int size, value;
     cout << "Enter number of elements: ";
     cin >> size;
     vector<int> arr;
-    // TODO: loop size times, ask for each element, push_back
+    for (int i = 0; i < size; i++) {
+        cout << "Enter element: " << i + 1 << ": ";
+        cin >> value;
+        arr.push_back(value);
+    }
     return arr;
 }
 
@@ -116,5 +148,6 @@ int main() {
     } while (choice != 5);
 
     cout << "Program closing..!\n";
+
     return 0;
 }

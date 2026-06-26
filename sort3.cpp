@@ -27,7 +27,7 @@ void bubbleSort(vector<int>& arr) {
 void selectionSort(vector<int>& arr) {
       for (int i = 0; i < arr.size(); i++) {
         int minIndex = i;
-        for (int j = i + 1; j < arr.size() - 1; j++) {
+        for (int j = i + 1; j < arr.size(); j++) {
                 if (arr[j] < arr[minIndex]) {
                     minIndex = j;
                 }
@@ -63,8 +63,8 @@ void merge(vector<int>& arr, int left, int mid, int right) {
     }
     for (int k = 0; k < temp.size(); k++) {
         arr[left + k] = temp[k];
-        printStep(arr, "Merged ");
     }
+    printStep(arr, "Merged ");
 }
 void mergeSort(vector<int>& arr, int left, int right) {
     if (left >= right) return;
@@ -108,7 +108,7 @@ vector<int> getUserArray() {
     cin >> size;
     vector<int> arr;
     for (int i = 0; i < size; i++) {
-        cout << "Enter element: " << i + 1 << ": ";
+        cout << "Enter element " << i + 1 << ": ";
         cin >> value;
         arr.push_back(value);
     }
